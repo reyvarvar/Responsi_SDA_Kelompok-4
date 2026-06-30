@@ -60,17 +60,17 @@ Aplikasi menggunakan Java Swing sehingga seluruh fitur dapat diakses melalui tam
 
 ## Struktur Data yang Digunakan
 
-**ArrayList<Lagu>**
+**1. ArrayList<Lagu>**
 Fungsi : Menyimpan seluruh daftar lagu
 Kompleksitas : O(1)
 Alasan pemilihan : Mudah digunakan untuk menyimpan data secara berurutan dan mendukung proses pengurutan.
 
-**HashMap<String, Lagu>**
+**2. HashMap<String, Lagu>**
 Fungsi : Membantu pencarian lagu
 Kompleksitas : O(1) (rata-rata)
 Alasan pemilihan : Memanfaatkan konsep key-value sehingga proses pencarian data lebih cepat dibanding pencarian linear.
 
-**TreeMap<String, List<Lagu>>**
+**3. TreeMap<String, List<Lagu>>**
 Fungsi : Mengelompokkan lagu berdasarkan genre, penyanyi, dan album
 Kompleksitas : O(log n)
 Alasan pemilihan : Menyimpan data dalam keadaan terurut sehingga hasil pengelompokan menjadi lebih rapi.
@@ -92,9 +92,13 @@ Sorting: Digunakan untuk mengurutkan daftar lagu agar informasi ditampilkan seca
 
 ## Langkah-langkah
 
-Buka VS Code.
-Tekan Ctrl + Shift + P.
-Ketik Git: Clone lalu pilih. 4. Tempel URL repository GitHub -> https://github.com/reyvarvar/Responsi_SDA_Kelompok-4 5. Pilih lokasi penyimpanan di komputer. 6. Tunggu proses clone selesai. 7. Akan muncul notifikasi "Open Repository", lalu klik Open.
+1. Buka VS Code.
+2. Tekan Ctrl + Shift + P.
+3. Ketik Git: Clone lalu pilih.
+4. Tempel URL repository GitHub -> https://github.com/reyvarvar/Responsi_SDA_Kelompok-4
+5. Pilih lokasi penyimpanan di komputer.
+6. Tunggu proses clone selesai.
+7. Akan muncul notifikasi "Open Repository", lalu klik Open.
 
 ---
 
@@ -113,7 +117,11 @@ Ketik Git: Clone lalu pilih. 4. Tempel URL repository GitHub -> https://github.c
 
 Program dikembangkan menggunakan library standar Java tanpa library eksternal.
 
-java.util.List -> Menyimpan kumpulan data lagu yang digunakan dalam aplikasi. 2. java.util.Map -> Menyimpan data lagu dalam bentuk pasangan _key-value_ untuk mempermudah pengelolaan dan pengelompokan data. 3. java.util.Random -> Menghasilkan nilai acak, misalnya untuk memilih lagu secara acak atau fitur lain yang memerlukan proses randomisasi. 4. javax.swing -> Membangun antarmuka GUI. 5. java.awt -> Komponen tampilan GUI.
+1. java.util.List -> Menyimpan kumpulan data lagu yang digunakan dalam aplikasi.
+2. java.util.Map -> Menyimpan data lagu dalam bentuk pasangan _key-value_ untuk mempermudah pengelolaan dan pengelompokan data.
+3. java.util.Random -> Menghasilkan nilai acak, misalnya untuk memilih lagu secara acak atau fitur lain yang memerlukan proses randomisasi.
+4. javax.swing -> Membangun antarmuka GUI.
+5. java.awt -> Komponen tampilan GUI.
 
 ---
 
