@@ -8,3 +8,11 @@ Anggota kelompok :
 Reyhan Diandra Alvaro (L0125029)
 Muhammad Naufal Albany (L0125053)
 Yura Aling Vatsabel Putri Andicha (L0125093)
+
+
+
+cara me-run code 
+
+javac builder/*.java mesin/*.java gui/*.java
+java gui.main
+

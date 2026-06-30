@@ -9,7 +9,6 @@ public class treedata {
     private Map<String, Map<String, Map<String, List<lagu>>>> treedata = new HashMap<>();
 
     public void tambah(lagu baru) {
-
         treedata.putIfAbsent(baru.getGenre(), new HashMap<>());
         Map<String, Map<String, List<lagu>>> penyanyi = treedata.get(baru.getGenre());
 
@@ -19,15 +18,14 @@ public class treedata {
         album.putIfAbsent(baru.getAlbum(), new ArrayList<>());
         List<lagu> daftar = album.get(baru.getAlbum());
 
-        daftar.add(baru); //lagu dimasukkan sesuai genre penyanyi dan album
+        daftar.add(baru); //lagu dimasukkan sesuai genre, penyanyi, dan album menggunakan map hashing (O(1))
     }
 
     public List<lagu> cari(String judul) {
-
         List<lagu> hasil = new ArrayList<>();
         String kunci = judul.toLowerCase();
 
-        //mencari lagu yang judulnya sesuai dengan pencarian user
+        //mencari lagu yang judulnya sesuai dengan pencarian user dengan mengecek seluruh data (O(N))
         for (Map<String, Map<String, List<lagu>>> penyanyi : treedata.values()) {
             for (Map<String, List<lagu>> album : penyanyi.values()) {
                 for (List<lagu> daftar : album.values()) {
@@ -39,7 +37,6 @@ public class treedata {
                 }
             }
         }
-
         return hasil;
     }
 

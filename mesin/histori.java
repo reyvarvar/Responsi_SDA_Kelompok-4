@@ -6,25 +6,27 @@ import java.util.*;
 
 public class histori {
 
-    private Deque<lagu> histori = new ArrayDeque<>();
+    private Deque<lagu> stackUndo = new ArrayDeque<>();
+    private List<lagu> logVisual = new ArrayList<>();
 
     public void masukan(lagu putar) {
-        histori.push(putar); //lagu disimpan agar bisa diputar kembali saat previous ditekan
+        stackUndo.push(putar); //lagu disimpan agar bisa diputar kembali saat previous ditekan (O(1))
+        logVisual.add(0, putar); //menyimpan lagu ke list visual agar tidak hilang dari layar gui
     }
 
     public lagu undo() {
-        return histori.pop(); //mengambil lagu terakhir dari histori
+        return stackUndo.pop(); //mengambil lagu terakhir dari histori (O(1))
     }
 
     public int size() {
-        return histori.size();
+        return stackUndo.size();
     }
 
     public boolean kosong() {
-        return histori.isEmpty();
+        return stackUndo.isEmpty();
     }
 
     public List<lagu> getallhistori() {
-        return new ArrayList<>(histori);
+        return logVisual; //menampilkan histori secara utuh di gui (O(1))
     }
 }

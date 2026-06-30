@@ -17,6 +17,7 @@ public class mainframe extends JFrame {
 
     private pemutar mesin;
 
+    // Deklarasi komponen UI untuk menampilkan informasi lagu
     private JLabel labeljudul;
     private JLabel labelpenyanyi;
     private JLabel labelalbum;
@@ -29,31 +30,28 @@ public class mainframe extends JFrame {
     public mainframe(pemutar mesin) {
         this.mesin = mesin;
 
-        setTitle("pemutar lagu - responsi sda");
+        setTitle("Pemutar Lagu - Responsi SDA");
         setSize(1000, 550);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Bikin jendela aplikasi muncul persis di tengah layar
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Program benar-benar berhenti saat di-close
 
-        // mengatur warna background utama jadi biru gelap (navy) biar elegan
+        // Mengatur warna background utama jadi biru gelap (navy) biar elegan
         JPanel panelutama = new JPanel(new BorderLayout(15, 15));
         panelutama.setBorder(new EmptyBorder(15, 15, 15, 15));
         panelutama.setBackground(new Color(44, 62, 80));
         setContentPane(panelutama);
 
-        // ==========================================
-        // PANEL KIRI (Pustaka Musik & Tambah Lagu)
-        // ==========================================
-        
+        // PANEL KIRI
         // BorderLayout digunakan untuk mengatur posisi area komponen (atas, bawah, tengah, kiri, kanan)
         JPanel panelkiri = new JPanel(new BorderLayout(0, 10));
-        panelkiri.setOpaque(false); // fungsi setOpaque(false) biar panel ini transparan ngikutin warna background navy
+        panelkiri.setOpaque(false); // fungsi setOpaque(false) biar panel ini transparan ngikutin warna background utama
 
         treelagu = new JTree();
-        refreshtree(); // muat data awal lagu dari HashMap ke tampilan JTree
+        refreshtree(); // Muat data awal lagu dari HashMap ke tampilan JTree
         treelagu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         treelagu.setBackground(new Color(236, 240, 241));
 
-        // menambahkan event listener klik ganda pada tree untuk memutar lagu
+        // Menambahkan event listener klik ganda (double click) pada tree untuk memutar lagu
         treelagu.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -66,8 +64,8 @@ public class mainframe extends JFrame {
                         Object info = node.getUserObject();
                         if (info instanceof lagu) {
                             lagu pilih = (lagu) info;
-                            mesin.getqueue().addantrean(pilih);
-                            if (mesin.getsekarang() == null) mesin.next();
+                            mesin.getqueue().addantrean(pilih); // Masukkan ke antrean
+                            if (mesin.getsekarang() == null) mesin.next(); // Langsung putar kalau lagi kosong
                             syncui();
                         }
                     }
@@ -78,82 +76,80 @@ public class mainframe extends JFrame {
         // JScrollPane berfungsi supaya list/tree bisa di-scroll ke bawah kalau datanya panjang
         JScrollPane scrolltree = new JScrollPane(treelagu);
         
-        // membuat border garis warna putih dengan teks judul panel di atasnya
+        // Membuat border garis warna putih dengan teks judul panel di atasnya
         scrolltree.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.WHITE),
-                " music ", 0, 0,
+                " Music ", 0, 0,
                 new Font("Segoe UI", Font.BOLD, 12), Color.BLUE));
         
-        // memasukkan scrolltree ke bagian tengah (center) dari panelkiri
+        // Memasukkan scrolltree ke bagian tengah (center) dari panelkiri
         panelkiri.add(scrolltree, BorderLayout.CENTER);
 
         // JButton adalah komponen tombol yang bisa diklik user
-        JButton tomboltambah = new JButton("+ tambah lagu baru");
+        JButton tomboltambah = new JButton("+ Tambah Lagu Baru");
         tomboltambah.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        tomboltambah.setBackground(new Color(39, 174, 96)); // mengatur warna hijau
-        tomboltambah.setForeground(Color.BLUE); // mengatur warna teks tombol jadi putih
+        tomboltambah.setBackground(new Color(39, 174, 96)); // Mengatur warna hijau
+        tomboltambah.setForeground(Color.BLUE); // Mengatur warna teks tombol
         tomboltambah.setFocusPainted(false);
-        tomboltambah.setOpaque(true); // WAJIB TRUE: biar warna tombol ga transparan/ketimpa tema OS Windows
-        tomboltambah.setCursor(new Cursor(Cursor.HAND_CURSOR)); // kursor berubah jadi ikon tangan pas ngehover
+        tomboltambah.setOpaque(true); // WAJIB TRUE: biar warna tombol ga ketimpa tema OS Windows
+        tomboltambah.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Kursor berubah jadi ikon tangan pas ngehover
 
-        // memberikan aksi (action) apa yang terjadi kalau tombol ditambah klik
+        // Memberikan aksi (action) apa yang terjadi kalau tombol ditambah klik
         tomboltambah.addActionListener(e -> formtambahlagu());
         panelkiri.add(tomboltambah, BorderLayout.SOUTH);
 
         panelkiri.setPreferredSize(new Dimension(300, 0));
         panelutama.add(panelkiri, BorderLayout.WEST);
 
-        // ==========================================
         // PANEL TENGAH (Label Lagu & Kontrol)
-        // ==========================================
         JPanel paneltengah = new JPanel(new BorderLayout());
-        paneltengah.setBackground(new Color(236, 240, 241)); // putih keabu-abuan
+        paneltengah.setBackground(new Color(236, 240, 241)); // Putih keabu-abuan
         paneltengah.setBorder(BorderFactory.createLineBorder(new Color(189, 195, 199), 3, true));
 
-        // JLabel digunakan untuk menampilkan teks statis biasa (bukan form input)
+        // BoxLayout mengatur komponen agar berjejer ke bawah (Y_AXIS)
         JPanel info = new JPanel();
-info.setOpaque(false);
-info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
-info.setBorder(new EmptyBorder(20,20,20,20));
+        info.setOpaque(false);
+        info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
+        info.setBorder(new EmptyBorder(20,20,20,20));
 
-labeljudul = new JLabel("Belum ada lagu");
-labeljudul.setAlignmentX(Component.CENTER_ALIGNMENT);
-labeljudul.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        // JLabel digunakan untuk menampilkan teks statis biasa (bukan form input)
+        labeljudul = new JLabel("Belum ada lagu");
+        labeljudul.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labeljudul.setFont(new Font("Segoe UI", Font.BOLD, 26));
 
-labelpenyanyi = new JLabel("-");
-labelpenyanyi.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelpenyanyi = new JLabel("-");
+        labelpenyanyi.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelpenyanyi.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 
-labelalbum = new JLabel("-");
-labelpenyanyi.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-labelalbum.setAlignmentX(Component.CENTER_ALIGNMENT);
-labelalbum.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        labelalbum = new JLabel("-");
+        labelalbum.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelalbum.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 
-labelgenre = new JLabel("-");
-labelgenre.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-labelgenre.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelgenre = new JLabel("-");
+        labelgenre.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        labelgenre.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        info.add(Box.createVerticalStrut(15)); // Memberi jarak kosong (spasi) antar komponen
+        JLabel now = new JLabel("NOW PLAYING");
+        now.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        now.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-info.add(Box.createVerticalStrut(15));
-JLabel now = new JLabel("NOW PLAYING");
-now.setFont(new Font("Segoe UI", Font.BOLD, 13));
-now.setAlignmentX(Component.CENTER_ALIGNMENT);
+        info.add(now);
+        JSeparator garis = new JSeparator(); // Garis pemisah horizontal
+        garis.setMaximumSize(new Dimension(220,2));
 
-info.add(now);
-JSeparator garis = new JSeparator();
-garis.setMaximumSize(new Dimension(220,2));
+        info.add(Box.createVerticalStrut(8));
+        info.add(garis);
+        info.add(Box.createVerticalStrut(15));
+        info.add(Box.createVerticalGlue()); // Mendorong komponen ke tengah
+        info.add(labeljudul);
+        info.add(Box.createVerticalStrut(15));
+        info.add(labelpenyanyi);
+        info.add(labelalbum);
+        info.add(labelgenre);
+        info.add(Box.createVerticalGlue());
 
-info.add(Box.createVerticalStrut(8));
-info.add(garis);
-info.add(Box.createVerticalStrut(15));
-info.add(Box.createVerticalGlue());
-info.add(labeljudul);
-info.add(Box.createVerticalStrut(15));
-info.add(labelpenyanyi);
-info.add(labelalbum);
-info.add(labelgenre);
-info.add(Box.createVerticalGlue());
-
-paneltengah.add(info, BorderLayout.CENTER);
+        paneltengah.add(info, BorderLayout.CENTER);
 
         // FlowLayout mengatur komponen agar berjejer rapi menyamping dari kiri ke kanan
         JPanel paneltombol = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 25));
@@ -162,32 +158,26 @@ paneltengah.add(info, BorderLayout.CENTER);
         JButton tombolprev = new JButton("⏮ Prev");
         JButton tombolnext = new JButton("Next ⏭");
        
-
         tombolprev.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tombolnext.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tombolprev.setPreferredSize(new Dimension(120,45));
-tombolnext.setPreferredSize(new Dimension(120,45));
-
+        tombolnext.setPreferredSize(new Dimension(120,45));
         
-        tombolprev.setBackground(new Color(52, 152, 219)); // warna tombol biru
+        tombolprev.setBackground(new Color(52, 152, 219)); // Warna tombol biru
         tombolnext.setBackground(new Color(52, 152, 219));
         tombolprev.setForeground(Color.RED);
         tombolnext.setForeground(Color.RED);
-        
         tombolprev.setFocusPainted(false);
         tombolnext.setFocusPainted(false);
         tombolprev.setOpaque(true);
         tombolnext.setOpaque(true);
 
-    paneltombol.add(tombolprev);
-paneltombol.add(tombolnext);
+        paneltombol.add(tombolprev);
+        paneltombol.add(tombolnext);
         paneltengah.add(paneltombol, BorderLayout.SOUTH);
         panelutama.add(paneltengah, BorderLayout.CENTER);
-        
 
-        // ==========================================
         // PANEL KANAN (Daftar Antrean & Histori)
-        // ==========================================
         
         // GridLayout membagi area panel sama besar. Format: (baris, kolom, jarak_X, jarak_Y)
         JPanel panelkanan = new JPanel(new GridLayout(2, 1, 0, 15));
@@ -196,7 +186,7 @@ paneltombol.add(tombolnext);
         JPanel panelqueue = new JPanel(new BorderLayout());
         panelqueue.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.GRAY), 
-                " antrean lagu ", 0, 0, 
+                " Antrean Lagu ", 0, 0, 
                 new Font("Segoe UI", Font.BOLD, 12), Color.blue));
         
         // JList digunakan untuk menampilkan daftar item secara menurun ke bawah
@@ -222,23 +212,31 @@ paneltombol.add(tombolnext);
 
         panelutama.add(panelkanan, BorderLayout.EAST);
 
-        // --- ACTION TOMBOL PREV & NEXT ---
+        // TOMBOL PREV & NEXT 
         tombolnext.addActionListener(e -> {
-            mesin.next();
-            syncui();
+            mesin.next(); // Panggil logika pindah lagu dari mesin pemutar
+            syncui();     // Sinkronisasi/Update tampilan UI
         });
 
         tombolprev.addActionListener(e -> {
-            mesin.prev();
-            syncui();
+            mesin.prev(); // Panggil logika putar histori dari mesin pemutar
+            syncui();     // Sinkronisasi/Update tampilan UI
         });
 
-        syncui(); // panggil sinkronisasi pertama kali saat program jalan
+        syncui(); // Panggil sinkronisasi pertama kali saat program jalan
     }
+    // FUNGSI LOGIKA GU
 
-    // ==========================================
-    // FUNGSI LOGIKA GUI
-    // ==========================================
+    /**
+     * Fungsi bantuan untuk menyeragamkan teks (Title Case).
+     * Contoh: "rOck" -> "Rock". Mencegah HashMap membuat dua folder beda.
+     */
+    private String rapikanTeks(String input) {
+        if (input == null || input.trim().isEmpty()) return "Unknown";
+        input = input.trim();
+        // Mengubah huruf pertama jadi kapital dan sisanya kecil
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+    }
 
     private void formtambahlagu() {
         // JTextField adalah kotak inputan tempat user mengetik teks
@@ -247,40 +245,47 @@ paneltombol.add(tombolnext);
         JTextField inputgenre = new JTextField();
         JTextField inputalbum = new JTextField();
 
-        // menyusun form input dalam bentuk array object
+        // Menyusun form input dalam bentuk array object
         Object[] form = {
-                "judul:", inputjudul,
-                "penyanyi:", inputpenyanyi,
-                "genre:", inputgenre,
-                "album:", inputalbum
+                "Judul:", inputjudul,
+                "Penyanyi:", inputpenyanyi,
+                "Genre:", inputgenre,
+                "Album:", inputalbum
         };
 
-        // memunculkan pop-up dialog bawaan Java Swing
-        int hasil = JOptionPane.showConfirmDialog(this, form, "tambah lagu", JOptionPane.OK_CANCEL_OPTION);
+        // Memunculkan pop-up dialog bawaan Java Swing
+        int hasil = JOptionPane.showConfirmDialog(this, form, "Tambah Lagu", JOptionPane.OK_CANCEL_OPTION);
         
         if (hasil == JOptionPane.OK_OPTION) {
-            // validasi: kalau ada kolom yang belum diisi (kosong), fungsi akan berhenti
-            if (inputjudul.getText().isEmpty() || inputpenyanyi.getText().isEmpty() || inputgenre.getText().isEmpty() || inputalbum.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "data tidak boleh kosong!");
+            // Validasi: Kalau ada kolom yang belum diisi (kosong), beri peringatan dan hentikan proses
+            if (inputjudul.getText().trim().isEmpty() || inputpenyanyi.getText().trim().isEmpty() || 
+                inputgenre.getText().trim().isEmpty() || inputalbum.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Data tidak boleh ada yang kosong!");
                 return;
             }
 
-            // generate id otomatis dengan kombinasi huruf L dan angka acak 100-999
+            // Mencegah duplikasi folder karena perbedaan huruf besar/kecil (BUG FIX)
+            String judul = inputjudul.getText().trim();
+            String penyanyi = rapikanTeks(inputpenyanyi.getText());
+            String genre = rapikanTeks(inputgenre.getText());
+            String album = rapikanTeks(inputalbum.getText());
+
+            // Generate ID otomatis dengan kombinasi huruf L dan angka acak 100-999
             String idbaru = "L" + (new Random().nextInt(900) + 100);
-            lagu baru = new lagu(idbaru, inputjudul.getText(), inputpenyanyi.getText(), inputgenre.getText(), 0, inputalbum.getText());
+            lagu baru = new lagu(idbaru, judul, penyanyi, genre, 0, album);
             
-            mesin.gettreedata().tambah(baru);
-            refreshtree(); // perbarui tampilan pustaka musik setelah lagu ditambah
+            mesin.gettreedata().tambah(baru); // Masukkan ke struktur data Tree (HashMap bersarang)
+            refreshtree(); // Perbarui tampilan pustaka musik di kiri
             
-            JOptionPane.showMessageDialog(this, "lagu sukses masuk pustaka!");
+            JOptionPane.showMessageDialog(this, "Lagu sukses masuk pustaka!");
         }
     }
 
     private void refreshtree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("semua lagu");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Semua Lagu");
         Map<String, Map<String, Map<String, List<lagu>>>> data = mesin.gettreedata().gettree();
 
-        // iterasi (perulangan) bersarang untuk membongkar isi HashMap bertingkat menjadi struktur pohon
+        // Iterasi (perulangan) bersarang untuk membongkar isi HashMap bertingkat menjadi struktur node UI (JTree)
         for (String genre : data.keySet()) {
             DefaultMutableTreeNode nodegenre = new DefaultMutableTreeNode(genre);
             root.add(nodegenre);
@@ -291,13 +296,14 @@ paneltombol.add(tombolnext);
                     DefaultMutableTreeNode nodealbum = new DefaultMutableTreeNode(album);
                     nodepenyanyi.add(nodealbum);
                     for (lagu item : data.get(genre).get(penyanyi).get(album)) {
-                        nodealbum.add(new DefaultMutableTreeNode(item));
+                        // Daun paling ujung (Leaf) berisi objek lagunya
+                        nodealbum.add(new DefaultMutableTreeNode(item)); 
                     }
                 }
             }
         }
         
-        // jika tree baru pertama kali dibuat, pasang modelnya. jika sudah ada, update (reload) saja.
+        // Jika tree baru pertama kali dibuat, pasang modelnya. Jika sudah ada, cukup update (reload) saja.
         if (modeltree == null) {
             modeltree = new DefaultTreeModel(root);
             treelagu.setModel(modeltree);
@@ -306,36 +312,28 @@ paneltombol.add(tombolnext);
             modeltree.reload();
         }
     }
-public void syncui() {
 
-    if (mesin.getsekarang() != null) {
+    /**
+     * Fungsi untuk memperbarui semua teks UI (Label, List) agar 
+     * selalu sama dengan data yang ada di class pemutar.java
+     */
+    public void syncui() {
+        if (mesin.getsekarang() != null) {
+            lagu sekarang = mesin.getsekarang();
+            labeljudul.setText(sekarang.getJudul());
+            labelpenyanyi.setText("Penyanyi : " + sekarang.getPenyanyi());
+            labelalbum.setText("Album : " + sekarang.getAlbum());
+            labelgenre.setText("Genre : " + sekarang.getGenre());
+        } else {
+            // Kondisi saat tidak ada lagu yang diputar
+            labeljudul.setText("Belum ada lagu");
+            labelpenyanyi.setText("-");
+            labelalbum.setText("-");
+            labelgenre.setText("-");
+        }
 
-        lagu sekarang = mesin.getsekarang();
-
-        labeljudul.setText(sekarang.getJudul());
-
-        labelpenyanyi.setText("Penyanyi : " + sekarang.getPenyanyi());
-
-        labelalbum.setText("Album : " + sekarang.getAlbum());
-
-        labelgenre.setText("Genre : " + sekarang.getGenre());
-
-    } else {
-
-        labeljudul.setText("Belum ada lagu");
-
-        labelpenyanyi.setText("");
-
-        labelalbum.setText("");
-
-        labelgenre.setText("");
-
+        // Konversi tipe data dari Queue/Stack ke bentuk List UI
+        listantrean.setListData(mesin.getqueue().getallqueueaslist().toArray(new lagu[0]));
+        listhistori.setListData(mesin.gethistori().getallhistori().toArray(new lagu[0]));
     }
-
-    listantrean.setListData(
-            mesin.getqueue().getallqueueaslist().toArray(new lagu[0]));
-
-    listhistori.setListData(
-            mesin.gethistori().getallhistori().toArray(new lagu[0]));
-}
 }

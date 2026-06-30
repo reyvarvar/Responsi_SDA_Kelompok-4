@@ -8,47 +8,38 @@ public class pemutar {
     private treedata treedata = new treedata();
     private queuelagu antrean = new queuelagu();
     private histori histori = new histori();
-    private lagu sekarang = null;
+    private lagu sekarang = null; //menyimpan lagu yang sedang dimainkan
 
     public void pilih(lagu pilih) {
-
-        //jika sebelumnya sudah ada lagu maka simpan dulu ke histori
         if (sekarang != null) {
-            histori.masukan(sekarang);
+            histori.masukan(sekarang); //simpan lagu sebelumnya ke histori (O(1))
         }
-
         sekarang = pilih;
     }
 
     public lagu next() {
-
-        //jika antrean kosong maka lagu yang sedang diputar tetap berjalan
         if (antrean.size() == 0) {
-            return sekarang;
+            return sekarang; //lagu tetap berjalan jika antrean kosong
         }
 
-        //lagu sekarang disimpan sebelum berpindah ke lagu berikutnya
         if (sekarang != null) {
-            histori.masukan(sekarang);
+            histori.masukan(sekarang); //simpan lagu sekarang sebelum ganti lagu (O(1))
         }
 
-        sekarang = antrean.putar();
+        sekarang = antrean.putar(); //ambil lagu terdepan dari antrean (O(1))
         return sekarang;
     }
 
     public lagu prev() {
-
-        //jika histori kosong berarti belum ada lagu sebelumnya
         if (histori.kosong()) {
-            return sekarang;
+            return sekarang; //abaikan jika belum ada histori lagu
         }
 
-        //lagu sekarang dikembalikan ke antrean depan sebelum memutar lagu sebelumnya
         if (sekarang != null) {
-            antrean.paksasekarang(sekarang);
+            antrean.paksasekarang(sekarang); //kembalikan lagu sekarang ke antrean terdepan (O(1))
         }
 
-        sekarang = histori.undo();
+        sekarang = histori.undo(); //ambil lagu terakhir dari histori (O(1))
         return sekarang;
     }
 

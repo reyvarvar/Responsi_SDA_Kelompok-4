@@ -9,19 +9,19 @@ public class queuelagu {
     private Deque<lagu> antrean = new ArrayDeque<>();
 
     public void addantrean(lagu lagu) {
-        antrean.offerLast(lagu); //lagu masuk ke belakang agar menunggu giliran diputar
+        antrean.offerLast(lagu); //lagu masuk ke belakang agar menunggu giliran diputar (O(1))
     }
 
     public void paksasekarang(lagu pilih) {
-        antrean.offerFirst(pilih); //lagu dipindahkan ke depan karena user memilih putar sekarang
+        antrean.offerFirst(pilih); //lagu dipindahkan ke depan karena user memilih putar sekarang (O(1))
     }
 
     public lagu putar() {
-        return antrean.pollFirst(); //mengambil lagu paling depan karena sudah menjadi giliran diputar
+        return antrean.pollFirst(); //mengambil lagu paling depan karena sudah menjadi giliran diputar (O(1))
     }
 
     public List<lagu> getallqueueaslist() {
-        return new ArrayList<>(antrean); //mengubah antrean menjadi list agar bisa ditampilkan di gui
+        return new ArrayList<>(antrean); //mengubah antrean menjadi list agar bisa ditampilkan di gui (O(N))
     }
 
     public int size() {
